@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:rive/rive.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,8 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
     body: SafeArea(
       child: Column(
         children: [
-          Expanded(child:RiveAnimation.asset('animated_login_bear.riv')
-        )
+          Expanded(child:RiveAnimation.asset('animated_login_bear.riv')),
       ],
     ),
   ),
