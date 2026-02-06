@@ -12,14 +12,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-  //evita que se quite espacio nudge
-    body: SafeArea(
-      child: Column(
-        children: [
-          Expanded(child:RiveAnimation.asset('animated_login_bear.riv')),
-      ],
-    ),
-  ),
-);
-}
+      body: SafeArea(
+        // Evita que el contenido se superponga con el notch
+        child: Column(
+          children: [
+            Expanded(
+              child: RiveAnimation.asset(
+                'assets/animated_login_bear.riv',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
