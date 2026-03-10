@@ -31,6 +31,61 @@ class _LoginScreenState extends State<LoginScreen> {
  //3.2 Timer
  Timer? _typingDebounce;
 
+// 4.1 Controllers
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+
+  // 4.2 Errores para mostrar en la UI
+  String? emailError;
+  String? passError;
+
+  // 4.3 Validadores
+  bool isValidEmail(String email) {
+    final re = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+    return re.hasMatch(email);
+  }
+
+  bool isValidPassword(String pass) {
+    // mínimo 8, una mayúscula, una minúscula, un dígito y un especial
+    final re = RegExp(
+      r'^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[^A-Za-z0-9]).{8,}$',
+    );
+    return re.hasMatch(pass);
+  }
+
+  // 4.4 Acción al botón
+  void _onLogin() {
+    final email = emailCtrl.text.trim();
+    final pass = passCtrl.text;
+
+    // Recalcular errores
+    final eError = isValidEmail(email) ? null : 'Email inválido';
+    final pError =
+        isValidPassword(pass)
+            ? null
+            : 'Mínimo 8 caracteres, 1 mayúscula,  1 minúscula, 1 número y 1 caracter especial';
+
+    // 4.5 Para avisar que hubo un cambio
+    setState(() {
+      emailError = eError;
+      passError = pError;
+    });
+
+    // 4.6 Cerrar el teclado y bajar manos
+    FocusScope.of(context).unfocus();
+    _typingDebounce?.cancel();
+    _isChecking?.change(false);
+    _isHandsUp?.change(false);
+    _numLook?.value = 50.0; // Mirada neutral
+
+    // 4.7 Activar triggers
+    if (eError == null && pError == null) {
+      _trigSuccess?.fire();
+    } else {
+      _trigFail?.fire();
+    }
+  }
+
   //2)) Listeners ()
   @override
   void initState() {
@@ -57,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final Size size = MediaQuery.of(context).size;
  
     return Scaffold(
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
@@ -89,7 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
               //Para separacion
               const SizedBox(height: 10),
               TextField(
-                //3)asignar FocusNode al TextField
+                //4.8 En lazar controller al text field
+                controller: emailCtrl,
+
+                //1.3 asignar FocusNode al TextField
                 focusNode: _emailFocusNode,
                 onChanged: (value) {
                   if (_isHandsUp != null) {
@@ -121,6 +179,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Para mostrar un tipo de tecleado
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
+                   //4.8 En lazar controller al text field
+                  errorText:emailError,
                   hintText: 'Email',
                   prefixIcon: Icon(Icons.email),
                   border: OutlineInputBorder(
@@ -131,6 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 10),
               TextField(
+                 //4.8 En lazar controller al text field
+                controller: passCtrl,
                 //3)asignar FocusNode al TextField
                 focusNode: _passwordFocusNode,
                 onChanged: (value) {
@@ -145,6 +207,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 obscureText: _obscureText,
                 decoration: InputDecoration(
+                  //4.9 Mostrar el texto de error
+                  errorText:passError,
                   hintText: 'Password',
                   prefixIcon: const Icon(Icons.lock),//Cerrado o Seguro
                   suffixIcon: IconButton(
@@ -163,7 +227,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-              )
+              ),
+              SizedBox(height:10),
+              //Texto de "Olvide mi contraseña"
+              SizedBox(
+                width: size.width,
+                child: const Text(
+                  "Forgot password?",
+                  //Alinearlo a la derecha
+                  textAlign: TextAlign.right,
+                  style:TextStyle(
+                  decoration:TextDecoration.underline
+                  ),
+                ),
+              ),
+              SizedBox(height:10),
+
+              MaterialButton(
+                //Toma todo el ancho posible
+                minWidth: size.width,
+                height: 50,
+                color: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius:BorderRadius.circular(12),
+                ),
+                onPressed: _onLogin,
+              child:Text("Login", style: TextStyle(
+                color:Colors.white),),
+               ),
+              //¿No tienes cuenta?
+              SizedBox(
+              width:size.width,
+               child:Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Dont have an account?"),
+                  TextButton(
+                    onPressed:(){},
+                    child:const Text(
+                      "Register",
+                      style:TextStyle(color:Colors.black,
+                      //Subrayado
+                      decoration:TextDecoration.underline,
+                      //Para negritas
+                      fontWeight:FontWeight.bold,
+                      ),
+                      ),
+                  )
+                ]),),
             ],
           ),
         ),
@@ -173,7 +284,9 @@ class _LoginScreenState extends State<LoginScreen> {
   //1.4 liberarr memoria/recursos al salir de la pantalla
   @override
   void dispose() {
-    //4) Liberar los FocusNode para evitar fugas de memoria
+    //4.11 Liberar Controller
+    emailCtrl.dispose();
+    passCtrl.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _typingDebounce?.cancel();
