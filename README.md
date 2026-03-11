@@ -3,7 +3,7 @@
 An interactive *animated login screen* built with *Flutter* and *Rive, featuring a responsive bear character that reacts to user interactions in real time using **State Machines*.
 
 ---
-## 📷 Demo
+## 📷 Demo 
 
 ![Login Animation Demo](assets/demo.gif)
 ## 🔥 Overview
