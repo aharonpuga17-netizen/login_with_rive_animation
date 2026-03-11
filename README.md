@@ -1,5 +1,8 @@
 # login_with_rive_animation
 
+#Demo
+![Login Animation Demo](assets/demo.gif)
+
 A new Flutter project.
 
 ## Getting Started
