@@ -5,7 +5,7 @@ An interactive *animated login screen* built with *Flutter* and *Rive, featuring
 ---
 ## 📷 Demo 
 
-![Login Animation Demo](assets/demo.gif)
+![Login Animation Demo](assets/demo2.gif)
 ## 🔥 Overview
 
 This project demonstrates, step by step, the process of building an animated login interface using *Rive animations integrated into Flutter*.  
