@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isValidPassword(String pass) {
     // mínimo 8, una mayúscula, una minúscula, un dígito y un especial
     final re = RegExp(
-      r'^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[^A-Za-z0-9]).{8,}$',
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$',
     );
     return re.hasMatch(pass);
   }
