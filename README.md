@@ -1,6 +1,6 @@
 # login_with_rive_animation
 
-# Demo
+# Demo 
 ![Login Animation Demo](assets/demo.gif)
 
 A new Flutter project.
